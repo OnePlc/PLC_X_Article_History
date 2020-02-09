@@ -22,6 +22,7 @@ use Application\Model\CoreEntityModel;
 use OnePlace\Article\History\Model\HistoryTable;
 use Laminas\View\Model\ViewModel;
 use Laminas\Db\Adapter\AdapterInterface;
+use OnePlace\Article\Model\ArticleTable;
 
 class HistoryController extends CoreEntityController {
     /**
@@ -108,8 +109,24 @@ class HistoryController extends CoreEntityController {
         ];
     }
 
+    private function updateArticlePrice($fNewPrice,$iArticleID) {
+        try {
+            $oArtTbl = CoreEntityController::$oServiceManager->get(ArticleTable::class);
+        } catch(\RuntimeException $e) {
+            return false;
+        }
+
+        if(isset($oArtTbl)) {
+            # Save price on article
+            $oArtTbl->updateAttribute('price_sell',$fNewPrice,'Article_ID',$iArticleID);
+        }
+    }
+
     public function attachHistoryToArticle($oItem,$aRawData) {
         $oItem->article_idfs = $aRawData['ref_idfs'];
+
+        # Save new price to article
+        $this->updateArticlePrice($oItem->price,$oItem->article_idfs);
 
         return $oItem;
     }

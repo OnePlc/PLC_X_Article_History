@@ -7,3 +7,4 @@ INSERT INTO `core_form_field` (`Field_ID`, `type`, `label`, `fieldkey`, `tab`, `
 (NULL, 'currency', 'Price', 'price', 'history-base', 'articlehistory-single', 'col-md-1', '', '', 0, 1, 0, '', '', ''),
 (NULL, 'number', 'Amount', 'amount', 'history-base', 'articlehistory-single', 'col-md-1', '', '', 0, 1, 0, '', '', '');
 
+UPDATE `core_form_field` SET `readonly` = '1' WHERE `core_form_field`.`fieldkey` LIKE 'price_sell' AND `form` LIKE 'article-single';
