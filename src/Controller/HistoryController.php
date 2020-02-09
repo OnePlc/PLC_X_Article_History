@@ -53,15 +53,27 @@ class HistoryController extends CoreEntityController {
 
     public function attachHistoryForm($oItem = false) {
         $oForm = CoreEntityController::$aCoreTables['core-form']->select(['form_key'=>'articlehistory-single']);
-        $aFields = [
-            'history-base' => CoreEntityController::$aCoreTables['core-form-field']->select(['form' => 'articlehistory-single']),
-        ];
 
+        $aFields = [];
+        $aUserFields = CoreEntityController::$oSession->oUser->getMyFormFields();
+        if(array_key_exists('articlehistory-single',$aUserFields)) {
+            $aFieldsTmp = $aUserFields['articlehistory-single'];
+            if(count($aFieldsTmp) > 0) {
+                # add all contact-base fields
+                foreach($aFieldsTmp as $oField) {
+                    if($oField->tab == 'history-base') {
+                        $aFields[] = $oField;
+                    }
+                }
+            }
+        }
+
+        $aFieldsByTab = ['history-base'=>$aFields];
         # Try to get adress table
         try {
             $oHistoryTbl = CoreEntityController::$oServiceManager->get(HistoryTable::class);
         } catch(\RuntimeException $e) {
-            //echo '<div class="alert alert-danger"><b>Error:</b> Could not load address table</div>';
+            echo '<div class="alert alert-danger"><b>Error:</b> Could not load address table</div>';
             return [];
         }
 
@@ -90,7 +102,7 @@ class HistoryController extends CoreEntityController {
                 'article_history'=> [
                     'oHistories'=>$aHistories,
                     'oForm'=>$oForm,
-                    'aFormFields'=>$aFields,
+                    'aFormFields'=>$aFieldsByTab,
                 ]
             ]
         ];
