@@ -2,7 +2,7 @@
 /**
  * HistoryTable.php - History Table
  *
- * Table Model for Article History
+ * Table Model for History History
  *
  * @category Model
  * @package Article\History
@@ -23,6 +23,7 @@ use Laminas\Db\Sql\Select;
 use Laminas\Db\Sql\Where;
 use Laminas\Paginator\Paginator;
 use Laminas\Paginator\Adapter\DbSelect;
+use OnePlace\History\Model\History;
 
 class HistoryTable extends CoreEntityTable {
 
@@ -40,69 +41,37 @@ class HistoryTable extends CoreEntityTable {
     }
 
     /**
-     * Get Article Entity
+     * Get History Entity
      *
      * @param int $id
+     * @param string $sKey
      * @return mixed
      * @since 1.0.0
      */
-    public function getSingle($id) {
+    public function getSingle($id,$sKey = 'History_ID') {
         # Use core function
-        return $this->getSingleEntity($id,'History_ID');
+        return $this->getSingleEntity($id,$sKey);
     }
 
     /**
-     * Save Article Entity
+     * Save History Entity
      *
-     * @param Article $oArticle
-     * @return int Article ID
+     * @param History $oHistory
+     * @return int History ID
      * @since 1.0.0
      */
-    public function saveSingle(History $oArticle) {
-        $aData = [];
+    public function saveSingle(History $oHistory) {
+        $aDefaultData = [
+            'label' => $oHistory->label,
+        ];
 
-        $aData = $this->attachDynamicFields($aData,$oArticle);
-
-        $id = (int) $oArticle->id;
-
-        if ($id === 0) {
-            # Add Metadata
-            $aData['created_by'] = CoreController::$oSession->oUser->getID();
-            $aData['created_date'] = date('Y-m-d H:i:s',time());
-            $aData['modified_by'] = CoreController::$oSession->oUser->getID();
-            $aData['modified_date'] = date('Y-m-d H:i:s',time());
-
-            # Insert Article
-            $this->oTableGateway->insert($aData);
-
-            # Return ID
-            return $this->oTableGateway->lastInsertValue;
-        }
-
-        # Check if Article Entity already exists
-        try {
-            $this->getSingle($id);
-        } catch (\RuntimeException $e) {
-            throw new \RuntimeException(sprintf(
-                'Cannot update History with identifier %d; does not exist',
-                $id
-            ));
-        }
-
-        # Update Metadata
-        $aData['modified_by'] = CoreController::$oSession->oUser->getID();
-        $aData['modified_date'] = date('Y-m-d H:i:s',time());
-
-        # Update Article
-        $this->oTableGateway->update($aData, ['History_ID' => $id]);
-
-        return $id;
+        return $this->saveSingleEntity($oHistory,'History_ID',$aDefaultData);
     }
 
     /**
      * Generate new single Entity
      *
-     * @return Article
+     * @return History
      * @since 1.0.0
      */
     public function generateNew() {

@@ -20,7 +20,7 @@ use Laminas\Router\Http\Segment;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 
 return [
-    # Article Module - Routes
+    # History Module - Routes
     'router' => [
         'routes' => [
             'article-history' => [
@@ -37,8 +37,18 @@ return [
                     ],
                 ],
             ],
+            'article-history-setup' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/article/history/setup',
+                    'defaults' => [
+                        'controller' => Controller\InstallController::class,
+                        'action'     => 'checkdb',
+                    ],
+                ],
+            ],
         ],
-    ],
+    ], # Routes
 
     # View Settings
     'view_manager' => [

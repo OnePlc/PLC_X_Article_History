@@ -2,7 +2,7 @@
 /**
  * History.php - History Entity
  *
- * Entity Model for Article History
+ * Entity Model for History History
  *
  * @category Model
  * @package Article\History
@@ -19,7 +19,7 @@ use Application\Model\CoreEntityModel;
 
 class History extends CoreEntityModel {
     /**
-     * Article constructor.
+     * History constructor.
      *
      * @param AdapterInterface $oDbAdapter
      * @since 1.0.0
@@ -42,6 +42,7 @@ class History extends CoreEntityModel {
      */
     public function exchangeArray(array $aData) {
         $this->id = !empty($aData['History_ID']) ? $aData['History_ID'] : 0;
+        $this->label = !empty($aData['label']) ? $aData['label'] : '';
 
         $this->updateDynamicFields($aData);
     }
