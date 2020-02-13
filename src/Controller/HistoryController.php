@@ -116,7 +116,7 @@ class HistoryController extends CoreEntityController {
             return false;
         }
 
-        if(isset($oArtTbl)) {
+        if(isset($oArtTbl) && $fNewPrice!='') {
             # Save price on article
             $oArtTbl->updateAttribute('price_sell',$fNewPrice,'Article_ID',$iArticleID);
         }

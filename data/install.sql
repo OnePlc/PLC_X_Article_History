@@ -23,6 +23,7 @@ INSERT INTO `core_form_button` (`Button_ID`, `label`, `icon`, `title`, `href`, `
 CREATE TABLE `article_history` (
   `History_ID` int(11) NOT NULL,
   `article_idfs` int(11) NOT NULL,
+  `label` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `comment` TEXT NOT NULL DEFAULT '',
   `created_by` int(11) NOT NULL,
   `created_date` datetime NOT NULL,
