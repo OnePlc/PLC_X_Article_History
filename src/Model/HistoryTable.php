@@ -23,7 +23,7 @@ use Laminas\Db\Sql\Select;
 use Laminas\Db\Sql\Where;
 use Laminas\Paginator\Paginator;
 use Laminas\Paginator\Adapter\DbSelect;
-use OnePlace\History\Model\History;
+use OnePlace\Article\History\Model\History;
 
 class HistoryTable extends CoreEntityTable {
 
